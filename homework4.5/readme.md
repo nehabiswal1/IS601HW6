@@ -10,3 +10,5 @@ tests/test_calculator.py::TestCalculatorCommands::test_multiply PASSED   [ 83%]
 tests/test_calculator.py::TestCalculatorCommands::test_subtract PASSED   [100%]
 
 ============================== 6 passed in 0.07s ===============================
+
+Hello! This will also have Homework 6!
