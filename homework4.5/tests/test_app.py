@@ -1,39 +1,28 @@
 import pytest
+from main import AddCommand, SubtractCommand, MultiplyCommand, DivideCommand, get_environment_variable
 
-from app import App
-
-def test_app_get_environment_variable():
-    app = App()
-#   Retrieve the current environment setting
-    current_env = app.get_environment_variable('ENVIRONMENT')
-    # Assert that the current environment is what you expect
+def test_get_environment_variable():
+    current_env = get_environment_variable('ENVIRONMENT')
     assert current_env in ['DEVELOPMENT', 'TESTING', 'PRODUCTION'], f"Invalid ENVIRONMENT: {current_env}"
 
+def test_add_command():
+    command = AddCommand()
+    assert command.execute(2, 3) == 5
 
+def test_subtract_command():
+    command = SubtractCommand()
+    assert command.execute(5, 3) == 2
 
-def test_app_start_exit_command(capfd, monkeypatch):
-    """Test that the REPL exits correctly on 'exit' command."""
-    # Simulate user entering 'exit'
-    monkeypatch.setattr('builtins.input', lambda _: 'exit')
-    app = App()
-    with pytest.raises(SystemExit) as e:
-        app.start()
-    assert e.type == SystemExit
+def test_multiply_command():
+    command = MultiplyCommand()
+    assert command.execute(2, 3) == 6
 
-def test_app_start_unknown_command(capfd, monkeypatch):
-    """Test how the REPL handles an unknown command before exiting."""
-    # Simulate user entering an unknown command followed by 'exit'
-    inputs = iter(['unknown_command', 'exit'])
-    monkeypatch.setattr('builtins.input', lambda _: next(inputs))
+def test_divide_command():
+    command = DivideCommand()
+    assert command.execute(6, 3) == 2
 
-    app = App()
-    
-    with pytest.raises(SystemExit) as excinfo:
-        app.start()
-    
-    # Optionally, check for specific exit code or message
-    # assert excinfo.value.code == expected_exit_code
-    
-    # Verify that the unknown command was handled as expected
-    captured = capfd.readouterr()
-    assert "No such command: unknown_command" in captured.out
+def test_divide_by_zero():
+    command = DivideCommand()
+    with pytest.raises(ValueError, match="Cannot divide by zero"):
+        command.execute(6, 0)
+

@@ -1,5 +1,17 @@
 # main.py
 
+from dotenv import load_dotenv
+import os
+
+load_dotenv()  # Loads the environment variables from the .env file
+
+def get_environment_variable(key):
+    return os.getenv(key)
+
+if __name__ == "__main__":
+    print(f"Running in {get_environment_variable('ENVIRONMENT')} environment")
+    main()
+
 class Command:
     def execute(self, *args):
         raise NotImplementedError
